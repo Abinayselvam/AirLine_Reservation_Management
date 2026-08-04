@@ -123,6 +123,33 @@ public class FlightRepository implements IFlightRepository {
         return null;
     }
 
+    @Override
+    public boolean updateAvailableSeats(int flightId, int delta) {
+
+        String sql = """
+                UPDATE flights
+                SET available_seats = available_seats + ?
+                WHERE flight_id = ? AND available_seats + ? >= 0
+                """;
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setInt(1, delta);
+            ps.setInt(2, flightId);
+            ps.setInt(3, delta);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     private Flight mapRow(ResultSet rs) throws Exception {
 
         Flight flight = new Flight();

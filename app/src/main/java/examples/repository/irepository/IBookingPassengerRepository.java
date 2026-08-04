@@ -9,4 +9,8 @@ public interface IBookingPassengerRepository {
     boolean saveAll(List<BookingPassenger> passengers);
 
     List<BookingPassenger> findByBookingId(int bookingId);
+
+    void updateDetails(BookingPassenger passenger);
+
+    void updateSeatNumber(int passengerBookingId, String newSeatNumber);
 }

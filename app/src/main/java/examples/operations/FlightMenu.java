@@ -65,8 +65,6 @@ public class FlightMenu {
 
                 case 9 -> { return; }
 
-                case 10 -> { return; }
-
                 default -> System.out.println("Invalid Choice");
             }
         }

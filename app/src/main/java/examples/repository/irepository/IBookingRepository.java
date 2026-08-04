@@ -18,4 +18,6 @@ public interface IBookingRepository {
     boolean updateStatus(int bookingId, BookingStatus status);
 
     boolean updateETicket(int bookingId, String eTicket);
+
+    boolean updateFlightAndFare(int bookingId, int flightId, double totalFare, double seatCharges);
 }

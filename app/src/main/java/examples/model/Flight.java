@@ -36,6 +36,17 @@ public class Flight {
     private String aircraftType;
 
     private int duration; // in minutes
+    private int totalSeats;
+
+    public int getTotalSeats() { return totalSeats; }
+    public void setTotalSeats(int totalSeats) { this.totalSeats = totalSeats; }
+
+    public double occupancyPercentage() {
+
+        if (totalSeats == 0) return 0;
+
+        return ((double) (totalSeats - availableSeats) / totalSeats) * 100;
+    }
 
     public Flight() {}
 

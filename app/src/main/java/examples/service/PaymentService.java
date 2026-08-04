@@ -192,10 +192,10 @@ public class PaymentService implements IPaymentService {
 
         double amount = Double.parseDouble(sc.nextLine());
 
-        UpiPayment refundHandler = new UpiPayment(new UpiDetails("refund@bank"));
 
-        RefundResult result = refundHandler.refund(booking.getPnr(), amount);
+        RefundResult result = processRefund(booking.getBookingId(), booking.getPnr(), amount);
 
+        System.out.println(result.getMessage());
         PaymentTransaction txn = new PaymentTransaction();
 
         txn.setBookingId(booking.getBookingId());
@@ -209,4 +209,25 @@ public class PaymentService implements IPaymentService {
 
         System.out.println(result.getMessage());
     }
+    @Override
+    public RefundResult processRefund(int bookingId, String pnr, double amount) {
+
+        UpiPayment refundHandler = new UpiPayment(new UpiDetails("refund@bank"));
+
+        RefundResult result = refundHandler.refund(pnr, amount);
+
+        PaymentTransaction txn = new PaymentTransaction();
+
+        txn.setBookingId(bookingId);
+        txn.setGatewayTransactionId(result.getRefundTransactionId());
+        txn.setMethod(PaymentMethod.UPI);
+        txn.setAmount(amount);
+        txn.setStatus(result.isSuccess() ? PaymentStatus.REFUNDED : PaymentStatus.REFUND_FAILED);
+        txn.setCreatedAt(LocalDateTime.now());
+
+        paymentRepository.save(txn);
+
+        return result;
+    }
+
 }

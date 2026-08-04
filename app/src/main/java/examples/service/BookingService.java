@@ -314,8 +314,9 @@ public class BookingService implements IBookingService {
 
         System.out.println("Check-in : " + (booking.isCheckInStatus() ? "Done" : "Pending"));
 
-        passengers.forEach(p ->
+        passengers.stream().filter(p -> !p.isCancelled()).forEach(p ->
                 System.out.println(" - " + p.getName() + " (Age " + p.getAge() +
                         ") | Seat " + p.getSeatNumber() + " | Meal " + p.getMealPreference()));
+
     }
 }

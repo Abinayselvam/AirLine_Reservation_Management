@@ -13,4 +13,6 @@ public interface IBookingPassengerRepository {
     void updateDetails(BookingPassenger passenger);
 
     void updateSeatNumber(int passengerBookingId, String newSeatNumber);
+
+    boolean updateCancelled(int passengerBookingId, boolean cancelled);
 }

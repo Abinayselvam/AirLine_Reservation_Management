@@ -16,6 +16,10 @@ public class BookingPassenger {
     private String seatNumber;
     private String contactEmail;
     private String contactPhone;
+    private boolean cancelled;
+
+    public boolean isCancelled() { return cancelled; }
+    public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
 
     public int getPassengerBookingId() { return passengerBookingId; }
     public void setPassengerBookingId(int passengerBookingId) { this.passengerBookingId = passengerBookingId; }

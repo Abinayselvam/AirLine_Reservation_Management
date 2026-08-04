@@ -4,6 +4,7 @@ import examples.enums.SeatCategory;
 import examples.enums.SeatStatus;
 import examples.enums.SeatType;
 import examples.model.Seat;
+import examples.repository.irepository.ISeatRepository;
 import examples.util.DBConnection;
 
 import java.sql.Connection;

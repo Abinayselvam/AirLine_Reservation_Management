@@ -1,7 +1,7 @@
 package examples.operations;
 
 import examples.service.FlightService;
-import examples.service.IFlightService;
+import examples.service.iservice.IFlightService;
 
 import java.util.Scanner;
 

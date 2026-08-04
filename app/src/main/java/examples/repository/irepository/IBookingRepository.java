@@ -1,4 +1,4 @@
-package examples.repository;
+package examples.repository.irepository;
 import examples.enums.BookingStatus;
 import examples.model.Booking;
 import java.util.List;

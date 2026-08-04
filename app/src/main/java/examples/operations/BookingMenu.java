@@ -1,7 +1,7 @@
 package examples.operations;
 
 import examples.service.BookingService;
-import examples.service.IBookingService;
+import examples.service.iservice.IBookingService;
 import java.util.Scanner;
 
 public class BookingMenu {

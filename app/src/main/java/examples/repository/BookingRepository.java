@@ -2,6 +2,7 @@ package examples.repository;
 
 import examples.enums.BookingStatus;
 import examples.model.Booking;
+import examples.repository.irepository.IBookingRepository;
 import examples.util.DBConnection;
 
 import java.sql.*;

@@ -1,6 +1,6 @@
 package examples.operations;
 
-import examples.service.IUserProfileService;
+import examples.service.iservice.IUserProfileService;
 import examples.service.UserProfileService;
 import examples.util.SessionManager;
 

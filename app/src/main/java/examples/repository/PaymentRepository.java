@@ -3,6 +3,7 @@ package examples.repository;
 import examples.enums.PaymentMethod;
 import examples.enums.PaymentStatus;
 import examples.model.PaymentTransaction;
+import examples.repository.irepository.IPaymentRepository;
 import examples.util.DBConnection;
 
 import java.sql.Connection;

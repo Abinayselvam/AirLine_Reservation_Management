@@ -3,6 +3,7 @@ package examples.repository;
 import examples.enums.Role;
 import examples.model.Passenger;
 import examples.model.User;
+import examples.repository.irepository.IUserRepository;
 import examples.util.DBConnection;
 import examples.util.PasswordUtil;
 

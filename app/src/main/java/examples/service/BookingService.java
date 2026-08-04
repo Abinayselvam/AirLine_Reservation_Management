@@ -5,6 +5,11 @@ import examples.enums.MealPreference;
 import examples.enums.SeatStatus;
 import examples.model.*;
 import examples.repository.*;
+import examples.repository.irepository.IBookingPassengerRepository;
+import examples.repository.irepository.IBookingRepository;
+import examples.repository.irepository.IFlightRepository;
+import examples.repository.irepository.ISeatRepository;
+import examples.service.iservice.IBookingService;
 import examples.util.*;
 
 import java.time.LocalDateTime;

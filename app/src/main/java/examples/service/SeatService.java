@@ -5,9 +5,10 @@ import examples.enums.SeatStatus;
 import examples.model.Flight;
 import examples.model.Seat;
 import examples.repository.FlightRepository;
-import examples.repository.IFlightRepository;
-import examples.repository.ISeatRepository;
+import examples.repository.irepository.IFlightRepository;
+import examples.repository.irepository.ISeatRepository;
 import examples.repository.SeatRepository;
+import examples.service.iservice.ISeatService;
 import examples.util.SeatMapGenerator;
 
 import java.util.ArrayList;

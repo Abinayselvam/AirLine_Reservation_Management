@@ -4,7 +4,9 @@ import examples.enums.SortBy;
 import examples.model.Flight;
 import examples.model.SearchCriteria;
 import examples.repository.FlightRepository;
-import examples.repository.IFlightRepository;
+import examples.repository.irepository.IFlightRepository;
+import examples.service.iservice.IFlightService;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;

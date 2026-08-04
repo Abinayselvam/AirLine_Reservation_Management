@@ -1,4 +1,4 @@
-package examples.repository;
+package examples.repository.irepository;
 
 import examples.enums.PaymentStatus;
 import examples.model.PaymentTransaction;

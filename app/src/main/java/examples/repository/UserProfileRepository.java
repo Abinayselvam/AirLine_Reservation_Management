@@ -4,6 +4,7 @@ import examples.enums.CommunicationPreference;
 import examples.enums.MealPreference;
 import examples.enums.SeatPreference;
 import examples.model.UserProfile;
+import examples.repository.irepository.IUserProfileRepository;
 import examples.util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

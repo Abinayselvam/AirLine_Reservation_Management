@@ -4,6 +4,7 @@ import examples.enums.FlightClass;
 import examples.enums.FlightStatus;
 import examples.model.Flight;
 import examples.model.SearchCriteria;
+import examples.repository.irepository.IFlightRepository;
 import examples.util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

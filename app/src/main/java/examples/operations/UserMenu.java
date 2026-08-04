@@ -1,6 +1,6 @@
 package examples.operations;
 
-import examples.service.IUserService;
+import examples.service.iservice.IUserService;
 import examples.service.UserService;
 import java.util.Scanner;
 

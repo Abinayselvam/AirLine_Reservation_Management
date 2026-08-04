@@ -2,6 +2,7 @@ package examples.repository;
 
 import examples.enums.MealPreference;
 import examples.model.BookingPassenger;
+import examples.repository.irepository.IBookingPassengerRepository;
 import examples.util.DBConnection;
 
 import java.sql.*;

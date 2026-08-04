@@ -1,4 +1,4 @@
-package examples.repository;
+package examples.repository.irepository;
 
 import examples.model.BookingPassenger;
 

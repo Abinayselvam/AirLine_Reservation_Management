@@ -5,14 +5,15 @@ import examples.enums.MealPreference;
 import examples.enums.SeatPreference;
 import examples.model.User;
 import examples.model.UserProfile;
-import examples.repository.IUserProfileRepository;
+import examples.repository.irepository.IUserProfileRepository;
 import examples.repository.UserProfileRepository;
+import examples.service.iservice.IUserProfileService;
 import examples.util.EnumUtil;
 import examples.util.SessionManager;
 
 import java.util.Scanner;
 
-public class UserProfileService implements IUserProfileService  {
+public class UserProfileService implements IUserProfileService {
     private final Scanner scanner =
             new Scanner(System.in);
 

@@ -1,4 +1,4 @@
-package examples.service;
+package examples.service.iservice;
 
 public interface IUserService
 {

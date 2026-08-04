@@ -8,9 +8,10 @@ import examples.payment.EmiPayment;
 import examples.payment.IPayment;
 import examples.payment.UpiPayment;
 import examples.repository.BookingRepository;
-import examples.repository.IBookingRepository;
-import examples.repository.IPaymentRepository;
+import examples.repository.irepository.IBookingRepository;
+import examples.repository.irepository.IPaymentRepository;
 import examples.repository.PaymentRepository;
+import examples.service.iservice.IPaymentService;
 import examples.util.PromoCodeUtil;
 
 import java.time.LocalDateTime;

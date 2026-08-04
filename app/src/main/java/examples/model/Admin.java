@@ -14,7 +14,9 @@ public class Admin extends User {
                 Permission.MANAGE_ALL_USERS,
                 Permission.MANAGE_FLIGHTS,
                 Permission.VIEW_ALL_BOOKINGS,
-                Permission.VIEW_REPORTS
+                Permission.VIEW_REPORTS,
+                Permission.MANAGE_AIRPORTS
+
         );
     }
 
@@ -29,6 +31,8 @@ public class Admin extends User {
             2.Manage Users
 
             3.Reports
+
+            4.Manage Airports
 
             """);
     }

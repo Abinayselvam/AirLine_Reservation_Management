@@ -12,5 +12,7 @@ public enum Permission {
 
     VIEW_ALL_BOOKINGS,
 
-    VIEW_REPORTS
+    VIEW_REPORTS,
+
+    MANAGE_AIRPORTS,
 }

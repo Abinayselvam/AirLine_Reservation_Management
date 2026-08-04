@@ -40,7 +40,7 @@ public class AdminMenu {
                     }
                 }
 
-                case 3 -> {
+                case 3, 4 -> {
 
                     if (AccessValidator.validate(
                             Permission.VIEW_REPORTS)) {
@@ -50,7 +50,9 @@ public class AdminMenu {
                     }
                 }
 
-                case 4 -> {
+                case 5 -> AirportMenu.start();
+
+                case 6 -> {
 
                     SessionManager.logout();
 

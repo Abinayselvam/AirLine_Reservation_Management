@@ -62,8 +62,10 @@ public class FlightMenu {
 
                     new examples.service.SeatService().selectSeats(flightId, count);
                 }
+                case 9 -> AirportMenu.start();
 
-                case 9 -> { return; }
+                case 10 -> { return; }
+
 
                 default -> System.out.println("Invalid Choice");
             }

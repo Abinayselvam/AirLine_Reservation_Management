@@ -112,9 +112,9 @@ public class BookingService implements IBookingService {
                 booking.getPnr(), booking.getTotalFare());
 
         // --- Payment integration point (UC 5) ---
-        System.out.print("Simulate Payment Success? (y/n) : ");
+        boolean paid = new PaymentService().processPayment(booking);
 
-        if (sc.nextLine().equalsIgnoreCase("y")) {
+        if (paid) {
 
             booking.transitionTo(BookingStatus.CONFIRMED);
 
@@ -139,7 +139,7 @@ public class BookingService implements IBookingService {
 
             markSeats(flightId, SeatStatus.AVAILABLE);
 
-            System.out.println("Booking CANCELLED - seats released");
+            System.out.println("Booking CANCELLED - payment unsuccessful, seats released");
         }
     }
 

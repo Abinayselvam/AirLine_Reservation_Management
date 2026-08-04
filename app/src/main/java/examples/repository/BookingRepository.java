@@ -210,4 +210,31 @@ public class BookingRepository implements IBookingRepository {
 
         return booking;
     }
+    @Override
+    public boolean updateFlightAndFare(int bookingId, int flightId, double totalFare, double seatCharges) {
+
+        String sql = """
+                UPDATE bookings
+                SET flight_id = ?, total_fare = ?, seat_charges = ?
+                WHERE booking_id = ?
+                """;
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setInt(1, flightId);
+            ps.setDouble(2, totalFare);
+            ps.setDouble(3, seatCharges);
+            ps.setInt(4, bookingId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

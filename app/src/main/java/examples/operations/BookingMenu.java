@@ -1,6 +1,8 @@
 package examples.operations;
 
+import examples.service.BookingCancellationService;
 import examples.service.BookingService;
+import examples.service.iservice.IBookingCancellationService;
 import examples.service.iservice.IBookingModificationService;
 import examples.service.BookingModificationService;
 import examples.service.iservice.IBookingService;
@@ -24,7 +26,8 @@ public class BookingMenu {
             System.out.println("5. My Booking History");
             System.out.println("6. Request Refund");
             System.out.println("7. Modify Booking");
-            System.out.println("8. Back");
+            System.out.println("8. Cancel Booking");
+            System.out.println("9. Back");
 
             System.out.print("Choice : ");
 
@@ -39,7 +42,10 @@ public class BookingMenu {
                 case 5 -> service.viewMyBookings();
                 case 6 -> new examples.service.PaymentService().processStandaloneRefund();
                 case 7 -> modifyMenu();
-                case 8 -> { return; }
+                case 8 -> cancelMenu();
+                case 9 -> {
+                    return;
+                }
 
                 default -> System.out.println("Invalid Choice");
             }
@@ -64,6 +70,26 @@ public class BookingMenu {
             case 1 -> modService.changeFlight();
             case 2 -> modService.modifyPassengerDetails();
             case 3 -> modService.changeSeat();
+            default -> {}
+        }
+    }
+    private static void cancelMenu() {
+
+        Scanner sc = new Scanner(System.in);
+
+       IBookingCancellationService cancelService =
+                new BookingCancellationService();
+
+        System.out.println("\n1. Cancel Entire Booking  2. Cancel Specific Passengers  3. Back");
+
+        System.out.print("Choice : ");
+
+        int choice = Integer.parseInt(sc.nextLine());
+
+        switch (choice) {
+
+            case 1 -> cancelService.cancelFullBooking();
+            case 2 -> cancelService.cancelPartialBooking();
             default -> {}
         }
     }

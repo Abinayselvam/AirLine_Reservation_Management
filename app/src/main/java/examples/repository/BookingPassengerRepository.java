@@ -88,7 +88,7 @@ public class BookingPassengerRepository implements IBookingPassengerRepository {
                 p.setSeatNumber(rs.getString("seat_number"));
                 p.setContactEmail(rs.getString("contact_email"));
                 p.setContactPhone(rs.getString("contact_phone"));
-
+                p.setCancelled(rs.getBoolean("cancelled"));
                 passengers.add(p);
             }
 
@@ -98,4 +98,37 @@ public class BookingPassengerRepository implements IBookingPassengerRepository {
 
         return passengers;
     }
+
+    @Override
+    public void updateDetails(BookingPassenger passenger) {
+
+    }
+
+    @Override
+    public void updateSeatNumber(int passengerBookingId, String newSeatNumber) {
+
+    }
+
+    @Override
+    public boolean updateCancelled(int passengerBookingId, boolean cancelled) {
+
+        String sql = "UPDATE booking_passengers SET cancelled = ? WHERE passenger_booking_id = ?";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setBoolean(1, cancelled);
+            ps.setInt(2, passengerBookingId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

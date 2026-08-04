@@ -52,7 +52,9 @@ public class AdminMenu {
 
                 case 5 -> AirportMenu.start();
 
-                case 6 -> {
+                case 6 -> PriorityBookingMenu.start();
+
+                case 7 -> {
 
                     SessionManager.logout();
 

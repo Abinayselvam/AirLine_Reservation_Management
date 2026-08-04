@@ -38,8 +38,8 @@ public class AirlineStaffMenu {
                                 "View bookings coming in UC 4");
                     }
                 }
-
-                case 3 -> {
+                case 3 -> PriorityBookingMenu.start();
+                case 4 -> {
 
                     SessionManager.logout();
                     return;

@@ -33,6 +33,8 @@ public class Admin extends User {
             3.Reports
 
             4.Manage Airports
+            
+            5.Priority Bookings
 
             """);
     }

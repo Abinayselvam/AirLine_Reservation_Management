@@ -24,6 +24,8 @@ public class AirlineStaff extends User {
             1.Update Flight
 
             2.View Bookings
+            
+            3.Priority Bookings
 
             """);
     }

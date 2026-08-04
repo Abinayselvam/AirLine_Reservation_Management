@@ -23,7 +23,8 @@ public class UserProfileMenu {
             System.out.println("2. View Profile");
             System.out.println("3. Update Profile");
             System.out.println("4. Search Flights");
-            System.out.println("5. Logout");
+            System.out.println("5. Priority Booking");
+            System.out.println("6. Logout");
 
             System.out.print("Enter Choice : ");
 
@@ -39,7 +40,8 @@ public class UserProfileMenu {
 
                 case 4 -> FlightMenu.start();
 
-                case 5 -> {
+                case 5 -> PriorityBookingMenu.start();
+                case 6 -> {
 
                     SessionManager.logout();
 

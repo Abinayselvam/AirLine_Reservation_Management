@@ -1,5 +1,4 @@
 import examples.operations.UserMenu;
-import examples.operations.UserProfileMenu;
 
 public class Main {
     public static void main(String[] args) {

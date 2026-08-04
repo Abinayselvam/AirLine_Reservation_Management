@@ -11,4 +11,6 @@ public interface IFlightRepository {
 
     List<Flight> searchFlights(SearchCriteria criteria);
 
+    Flight findById(int flightId);
+
 }

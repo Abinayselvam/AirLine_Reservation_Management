@@ -9,7 +9,9 @@ import examples.util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,6 +153,159 @@ public class FlightRepository implements IFlightRepository {
         return false;
     }
 
+    @Override
+    public int save(Flight flight) {
+
+        String sql = """
+                INSERT INTO flights
+                (airline_name, flight_number, source, destination,
+                 departure_date, departure_time, arrival_time, fare,
+                 travel_class, available_seats, total_seats, stops,
+                 status, aircraft_type, duration)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                """;
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
+
+            ps.setString(1, flight.getAirlineName());
+            ps.setString(2, flight.getFlightNumber());
+            ps.setString(3, flight.getSource());
+            ps.setString(4, flight.getDestination());
+            ps.setObject(5, flight.getDepartureDate());
+            ps.setObject(6, flight.getDepartureTime());
+            ps.setObject(7, flight.getArrivalTime());
+            ps.setDouble(8, flight.getFare());
+            ps.setString(9, flight.getTravelClass().name());
+            ps.setInt(10, flight.getAvailableSeats());
+            ps.setInt(11, flight.getTotalSeats());
+            ps.setInt(12, flight.getStops());
+            ps.setString(13, flight.getStatus().name());
+            ps.setString(14, flight.getAircraftType());
+            ps.setInt(15, flight.getDuration());
+
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+
+                ResultSet keys = ps.getGeneratedKeys();
+
+                if (keys.next()) {
+
+                    int id = keys.getInt(1);
+
+                    flight.setFlightId(id);
+
+                    return id;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
+    @Override
+    public boolean updateSchedule(int flightId, java.time.LocalDate departureDate,
+                                  java.time.LocalTime departureTime,
+                                  java.time.LocalTime arrivalTime, int duration) {
+
+        String sql = """
+                UPDATE flights
+                SET departure_date = ?, departure_time = ?, arrival_time = ?, duration = ?
+                WHERE flight_id = ?
+                """;
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setObject(1, departureDate);
+            ps.setObject(2, departureTime);
+            ps.setObject(3, arrivalTime);
+            ps.setInt(4, duration);
+            ps.setInt(5, flightId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean updateFare(int flightId, double fare) {
+
+        String sql = "UPDATE flights SET fare = ? WHERE flight_id = ?";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setDouble(1, fare);
+            ps.setInt(2, flightId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean updateAircraftType(int flightId, String aircraftType) {
+
+        String sql = "UPDATE flights SET aircraft_type = ? WHERE flight_id = ?";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setString(1, aircraftType);
+            ps.setInt(2, flightId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean updateStatus(int flightId, FlightStatus status) {
+
+        String sql = "UPDATE flights SET status = ? WHERE flight_id = ?";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setString(1, status.name());
+            ps.setInt(2, flightId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     private Flight mapRow(ResultSet rs) throws Exception {
 
         Flight flight = new Flight();
@@ -170,7 +325,7 @@ public class FlightRepository implements IFlightRepository {
         flight.setStatus(FlightStatus.valueOf(rs.getString("status")));
         flight.setAircraftType(rs.getString("aircraft_type"));
         flight.setDuration(rs.getInt("duration"));
-
+        flight.setTotalSeats(rs.getInt("total_seats"));
         return flight;
     }
 }

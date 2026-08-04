@@ -28,15 +28,7 @@ public class AdminMenu {
 
             switch (choice) {
 
-                case 1 -> {
-
-                    if (AccessValidator.validate(
-                            Permission.MANAGE_FLIGHTS)) {
-
-                        System.out.println(
-                                "Flight management coming in UC 8");
-                    }
-                }
+                case 1 -> FlightManagementMenu.start();
 
                 case 2 -> {
 

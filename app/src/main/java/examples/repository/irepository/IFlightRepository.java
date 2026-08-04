@@ -14,4 +14,15 @@ public interface IFlightRepository {
     Flight findById(int flightId);
 
     boolean updateAvailableSeats(int flightId, int delta);
+    int save(Flight flight);
+
+    boolean updateSchedule(int flightId, java.time.LocalDate departureDate,
+                           java.time.LocalTime departureTime,
+                           java.time.LocalTime arrivalTime, int duration);
+
+    boolean updateFare(int flightId, double fare);
+
+    boolean updateAircraftType(int flightId, String aircraftType);
+
+    boolean updateStatus(int flightId, examples.enums.FlightStatus status);
 }

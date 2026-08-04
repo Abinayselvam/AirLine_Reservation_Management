@@ -13,4 +13,5 @@ public interface IFlightRepository {
 
     Flight findById(int flightId);
 
+    boolean updateAvailableSeats(int flightId, int delta);
 }

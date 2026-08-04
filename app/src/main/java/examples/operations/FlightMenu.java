@@ -41,8 +41,31 @@ public class FlightMenu {
                 case 5 -> service.viewGroupedByPriceRange();
 
                 case 6 -> service.viewGroupedByDepartureSlot();
+                case 7 -> {
 
-                case 7 -> { return; }
+                    System.out.print("Flight ID : ");
+
+                    int flightId = Integer.parseInt(sc.nextLine());
+
+                    new examples.service.SeatService().displaySeatMap(flightId);
+                }
+
+                case 8 -> {
+
+                    System.out.print("Flight ID : ");
+
+                    int flightId = Integer.parseInt(sc.nextLine());
+
+                    System.out.print("Number of Passengers : ");
+
+                    int count = Integer.parseInt(sc.nextLine());
+
+                    new examples.service.SeatService().selectSeats(flightId, count);
+                }
+
+                case 9 -> { return; }
+
+                case 10 -> { return; }
 
                 default -> System.out.println("Invalid Choice");
             }

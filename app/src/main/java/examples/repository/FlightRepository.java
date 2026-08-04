@@ -98,6 +98,31 @@ public class FlightRepository implements IFlightRepository {
         return flights;
     }
 
+    @Override
+    public Flight findById(int flightId) {
+
+        String sql = "SELECT * FROM flights WHERE flight_id = ?";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setInt(1, flightId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapRow(rs);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private Flight mapRow(ResultSet rs) throws Exception {
 
         Flight flight = new Flight();

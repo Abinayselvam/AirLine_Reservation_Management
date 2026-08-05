@@ -1,5 +1,6 @@
 package examples.model;
 
+import examples.enums.CommunicationPreference;
 import examples.enums.Permission;
 import examples.enums.Role;
 
@@ -15,9 +16,9 @@ public class Passenger extends User {
                      String password,
                      String dob,
                      String passport,
-                     Role role, boolean active) {
+                     Role role, CommunicationPreference communicationPreference, boolean active) {
 
-        super(userId,name,email,phone,password,dob,passport,role,active);
+        super(userId,name,email,phone,password,dob,passport,role,communicationPreference,active);
     }
 
     @Override

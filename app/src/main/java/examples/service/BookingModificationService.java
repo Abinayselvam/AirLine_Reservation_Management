@@ -183,6 +183,10 @@ public class BookingModificationService implements IBookingModificationService {
         BookingPassenger passenger = passengers.get(index);
 
         boolean nameChanged = false;
+        String revisedETicket = null;
+        examples.manager.NotificationManager.getInstance().sendModificationConfirmation(
+                new examples.repository.UserRepository().findById(booking.getUserId()),
+                booking.getPnr(), revisedETicket);
 
         System.out.print("New Name (blank to keep '" + passenger.getName() + "') : ");
 
@@ -251,7 +255,7 @@ public class BookingModificationService implements IBookingModificationService {
 
         if (nameChanged) {
 
-            String revisedETicket = ETicketGenerator.generate(booking.getPnr());
+            revisedETicket = ETicketGenerator.generate(booking.getPnr());
 
             bookingRepository.updateETicket(booking.getBookingId(), revisedETicket);
 

@@ -9,5 +9,5 @@ public interface IPaymentService {
 
     void processStandaloneRefund();
 
-    RefundResult processRefund(int bookingId, String pnr, double amount);
+    RefundResult processRefund(int userId,int bookingId,String pnr, double amount);
 }

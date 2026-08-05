@@ -130,5 +130,48 @@ public class BookingPassengerRepository implements IBookingPassengerRepository {
 
         return false;
     }
+    @Override
+    public List<BookingPassenger> findAll() {
+
+        List<BookingPassenger> passengers = new ArrayList<>();
+
+        String sql = "SELECT * FROM booking_passengers";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+
+            while (rs.next()) {
+
+                BookingPassenger p = new BookingPassenger();
+
+                p.setPassengerBookingId(rs.getInt("passenger_booking_id"));
+                p.setBookingId(rs.getInt("booking_id"));
+                p.setName(rs.getString("name"));
+                p.setAge(rs.getInt("age"));
+                p.setGender(rs.getString("gender"));
+                p.setIdProof(rs.getString("id_proof"));
+
+                String meal = rs.getString("meal_preference");
+                p.setMealPreference(meal == null ? null : MealPreference.valueOf(meal));
+
+                p.setSpecialAssistance(rs.getString("special_assistance"));
+                p.setFrequentFlyerNumber(rs.getString("frequent_flyer_number"));
+                p.setSeatNumber(rs.getString("seat_number"));
+                p.setContactEmail(rs.getString("contact_email"));
+                p.setContactPhone(rs.getString("contact_phone"));
+                p.setCancelled(rs.getBoolean("cancelled"));
+
+                passengers.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return passengers;
+    }
 
 }

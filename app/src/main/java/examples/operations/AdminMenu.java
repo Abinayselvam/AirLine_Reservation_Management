@@ -40,21 +40,14 @@ public class AdminMenu {
                     }
                 }
 
-                case 3, 4 -> {
+                case 3 -> ReportingMenu.start();
 
-                    if (AccessValidator.validate(
-                            Permission.VIEW_REPORTS)) {
 
-                        System.out.println(
-                                "Reports coming in UC 13");
-                    }
-                }
+                case 4 -> AirportMenu.start();
 
-                case 5 -> AirportMenu.start();
+                case 5 -> PriorityBookingMenu.start();
 
-                case 6 -> PriorityBookingMenu.start();
-
-                case 7 -> {
+                case 6 -> {
 
                     System.out.println("\n===== SYSTEM CACHE / LOG STATS =====");
 
@@ -68,7 +61,7 @@ public class AdminMenu {
                             examples.manager.PaymentManager.getInstance().logSize());
                 }
 
-                case 8 -> {
+                case 7 -> {
 
                     SessionManager.logout();
 

@@ -106,4 +106,39 @@ public class PaymentRepository implements IPaymentRepository {
 
         return false;
     }
+    @Override
+    public List<PaymentTransaction> findAll() {
+
+        List<PaymentTransaction> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM payment_transactions";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+
+            while (rs.next()) {
+
+                PaymentTransaction txn = new PaymentTransaction();
+
+                txn.setTransactionId(rs.getInt("transaction_id"));
+                txn.setBookingId(rs.getInt("booking_id"));
+                txn.setGatewayTransactionId(rs.getString("gateway_transaction_id"));
+                txn.setMethod(PaymentMethod.valueOf(rs.getString("method")));
+                txn.setAmount(rs.getDouble("amount"));
+                txn.setDiscountApplied(rs.getDouble("discount_applied"));
+                txn.setStatus(PaymentStatus.valueOf(rs.getString("status")));
+                txn.setCreatedAt(rs.getObject("created_at", java.time.LocalDateTime.class));
+
+                list.add(txn);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }

@@ -12,4 +12,6 @@ public interface IPaymentRepository {
     List<PaymentTransaction> findByBookingId(int bookingId);
 
     boolean updateStatus(int transactionId, PaymentStatus status);
+
+    List<PaymentTransaction> findAll();
 }

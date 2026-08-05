@@ -20,4 +20,6 @@ public interface IBookingRepository {
     boolean updateETicket(int bookingId, String eTicket);
 
     boolean updateFlightAndFare(int bookingId, int flightId, double totalFare, double seatCharges);
+
+    List<Booking> findAll();
 }

@@ -22,4 +22,6 @@ public interface IBookingRepository {
     boolean updateFlightAndFare(int bookingId, int flightId, double totalFare, double seatCharges);
 
     List<Booking> findAll();
+
+    boolean updateCheckInStatus(int bookingId, boolean checkedIn);
 }

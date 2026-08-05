@@ -27,7 +27,8 @@ public class BookingMenu {
             System.out.println("6. Request Refund");
             System.out.println("7. Modify Booking");
             System.out.println("8. Cancel Booking");
-            System.out.println("9. Back");
+            System.out.println("9. Online Check-In");
+            System.out.println("10. Back");
 
             System.out.print("Choice : ");
 
@@ -43,7 +44,8 @@ public class BookingMenu {
                 case 6 -> new examples.service.PaymentService().processStandaloneRefund();
                 case 7 -> modifyMenu();
                 case 8 -> cancelMenu();
-                case 9 -> {
+                case 9 -> CheckInMenu.start();
+                case 10 -> {
                     return;
                 }
 

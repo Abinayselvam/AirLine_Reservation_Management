@@ -260,4 +260,25 @@ public class BookingRepository implements IBookingRepository {
 
         return bookings;
     }
+    @Override
+    public boolean updateCheckInStatus(int bookingId, boolean checkedIn) {
+
+        String sql = "UPDATE bookings SET check_in_status = ? WHERE booking_id = ?";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setBoolean(1, checkedIn);
+            ps.setInt(2, bookingId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

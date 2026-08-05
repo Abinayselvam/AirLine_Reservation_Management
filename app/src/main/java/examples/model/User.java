@@ -1,5 +1,6 @@
 package examples.model;
 
+import examples.enums.CommunicationPreference;
 import examples.enums.Permission;
 import java.util.Set;
 import examples.enums.Role;
@@ -15,6 +16,7 @@ public abstract class User {
     protected String passportNo;
     protected examples.enums.Role role;
     protected boolean active;
+    protected CommunicationPreference communicationPreference;
 
     public User() {}
 
@@ -22,7 +24,7 @@ public abstract class User {
                 String phone, String password,
                 String dateOfBirth,
                 String passportNo,
-                Role role, boolean active) {
+                Role role,CommunicationPreference communicationPreference ,boolean active) {
 
         this.userId = userId;
         this.name = name;
@@ -32,6 +34,7 @@ public abstract class User {
         this.dateOfBirth = dateOfBirth;
         this.passportNo = passportNo;
         this.role = role;
+        this.communicationPreference = communicationPreference;
         this.active=active;
     }
 
@@ -67,6 +70,14 @@ public abstract class User {
     public examples.enums.Role getRole()
     {
         return role;
+    }
+    public CommunicationPreference getCommunicationPreference() {
+        return communicationPreference;
+    }
+    public void setCommunicationPreference(
+            CommunicationPreference communicationPreference) {
+
+        this.communicationPreference = communicationPreference;
     }
     public boolean getActive()
     {
@@ -114,4 +125,6 @@ public abstract class User {
         return getPermissions().contains(permission);
     }
     public abstract void showDashboard();
+
+
 }

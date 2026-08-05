@@ -6,7 +6,6 @@ import examples.model.User;
 import examples.repository.irepository.IUserRepository;
 import examples.util.DBConnection;
 import examples.util.PasswordUtil;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,54 +17,30 @@ public class UserRepository implements IUserRepository {
     public boolean save(User user) {
 
         String sql = """
-                INSERT INTO users
-                (
-                name,
-                email,
-                phone,
-                date_of_birth,
-                passport_no,
-                password,
-                role,
-                active
-                )
+                INSERT INTO users(name,email,phone,date_of_birth,passport_no,password,role,active)
                 VALUES
                 (?,?,?,?,?,?,?,?)
                 """;
 
         try (
-
-                Connection con =
-                        DBConnection.getConnection();
-
-                PreparedStatement ps =
-                        con.prepareStatement(sql)
-
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
         ) {
+            ps.setString(1,user.getName());
 
-            ps.setString(1,
-                    user.getName());
+            ps.setString(2,user.getEmail());
 
-            ps.setString(2,
-                    user.getEmail());
+            ps.setString(3,user.getPhone());
 
-            ps.setString(3,
-                    user.getPhone());
+            ps.setString(4,user.getDateOfBirth());
 
-            ps.setString(4,
-                    user.getDateOfBirth());
+            ps.setString(5,user.getPassportNo());
 
-            ps.setString(5,
-                    user.getPassportNo());
+            ps.setString(6,user.getPassword());
 
-            ps.setString(6,
-                    user.getPassword());
+            ps.setString(7,user.getRole().name());
 
-            ps.setString(7,
-                    user.getRole().name());
-
-            ps.setBoolean(8,
-                    true);
+            ps.setBoolean(8,true);
 
             return ps.executeUpdate() > 0;
 
@@ -109,20 +84,7 @@ public class UserRepository implements IUserRepository {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-
-                Passenger passenger = new Passenger();
-
-                passenger.setUserId(rs.getInt("user_id"));
-                passenger.setName(rs.getString("name"));
-                passenger.setEmail(rs.getString("email"));
-                passenger.setPhone(rs.getString("phone"));
-                passenger.setDateOfBirth(rs.getString("date_of_birth"));
-                passenger.setPassportNo(rs.getString("passport_no"));
-                passenger.setPassword(rs.getString("password"));
-                passenger.setRole(Role.valueOf(rs.getString("role")));
-                passenger.setActive(rs.getBoolean("active"));
-
-                return passenger;
+                return mapRow(rs);
             }
 
         } catch (Exception e) {
@@ -233,5 +195,56 @@ public class UserRepository implements IUserRepository {
         return false;
     }
 
+    @Override
+    public User findById(int userId) {
+
+        String sql = "SELECT * FROM users WHERE user_id = ?";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapRow(rs);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
     // Remaining methods will be implemented in the next step
+
+    private User mapRow(ResultSet rs) throws Exception {
+
+        Role role = Role.valueOf(rs.getString("role"));
+
+        User user = switch (role) {
+            case ADMIN -> new examples.model.Admin();
+            case AIRLINE_STAFF -> new examples.model.AirlineStaff();
+            case PASSENGER -> new Passenger();
+        };
+
+        user.setUserId(rs.getInt("user_id"));
+        user.setName(rs.getString("name"));
+        user.setEmail(rs.getString("email"));
+        user.setPhone(rs.getString("phone"));
+        user.setDateOfBirth(rs.getString("date_of_birth"));
+        user.setPassportNo(rs.getString("passport_no"));
+        user.setPassword(rs.getString("password"));
+        user.setRole(role);
+        user.setActive(rs.getBoolean("active"));
+
+        return user;
+    }
+
 }

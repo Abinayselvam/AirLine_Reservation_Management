@@ -18,4 +18,5 @@ public interface IUserRepository {
     List<User> findAll();
 
     boolean updatePassword(String email, String password);
+    User findById(int userId);
 }

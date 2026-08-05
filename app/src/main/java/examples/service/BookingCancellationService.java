@@ -90,7 +90,9 @@ public class BookingCancellationService implements IBookingCancellationService {
         if (refundAmount > 0) {
 
             var result = paymentService.processRefund(
-                    booking.getBookingId(), booking.getPnr(), refundAmount);
+                    booking.getUserId(), booking.getBookingId(), booking.getPnr(), refundAmount);
+            examples.manager.NotificationManager.getInstance().sendCancellationConfirmation(
+                    new examples.repository.UserRepository().findById(booking.getUserId()), booking.getPnr());
 
             System.out.println(result.getMessage());
 
@@ -209,7 +211,7 @@ public class BookingCancellationService implements IBookingCancellationService {
 
         if (totalRefund > 0) {
 
-            var result = paymentService.processRefund(
+            var result = paymentService.processRefund(booking.getUserId(),
                     booking.getBookingId(), booking.getPnr(), totalRefund);
 
             System.out.println(result.getMessage());

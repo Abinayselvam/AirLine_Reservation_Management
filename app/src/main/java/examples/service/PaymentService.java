@@ -82,6 +82,9 @@ public class PaymentService implements IPaymentService {
                 System.out.println(result.getMessage());
 
                 printReceipt(booking, txn);
+                examples.manager.NotificationManager.getInstance()
+                        .sendPaymentReceipt(new examples.repository.UserRepository().findById(booking.getUserId()),
+                                booking.getPnr(), txn.getAmount());
 
                 return true;
             }
@@ -210,7 +213,8 @@ public class PaymentService implements IPaymentService {
 
         System.out.println(result.getMessage());
     }
-    @Override
+
+
     public RefundResult processRefund(int bookingId, String pnr, double amount) {
 
         UpiPayment refundHandler = new UpiPayment(new UpiDetails("refund@bank"));
@@ -227,6 +231,17 @@ public class PaymentService implements IPaymentService {
         txn.setCreatedAt(LocalDateTime.now());
 
         paymentRepository.save(txn);
+
+
+        return result;
+    }
+
+    public RefundResult processRefund(int userId, int bookingId, String pnr, double amount) {
+
+        RefundResult result = processRefund(bookingId, pnr, amount);
+
+        examples.manager.NotificationManager.getInstance().sendRefundInitiated(
+                new examples.repository.UserRepository().findById(userId), pnr, amount);
 
         return result;
     }

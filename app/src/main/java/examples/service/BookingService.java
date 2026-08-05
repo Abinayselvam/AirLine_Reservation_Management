@@ -142,6 +142,8 @@ public class BookingService implements IBookingService {
                 flightRepository.updateAvailableSeats(flightId, -count);
 
                 System.out.println("Booking CONFIRMED. E-Ticket : " + eTicket);
+                examples.manager.NotificationManager.getInstance()
+                        .sendBookingConfirmation(user, booking.getPnr(), eTicket);
 
             } else {
 

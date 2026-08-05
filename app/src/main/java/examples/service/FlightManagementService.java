@@ -3,6 +3,7 @@ package examples.service;
 import examples.enums.FlightClass;
 import examples.enums.FlightStatus;
 import examples.enums.Permission;
+import examples.manager.FlightManager;
 import examples.model.Flight;
 import examples.repository.FlightRepository;
 import examples.repository.SeatRepository;
@@ -176,7 +177,7 @@ public class FlightManagementService implements IFlightManagementService {
 
         FlightStatus status = FlightStatus.valueOf(sc.nextLine().toUpperCase());
 
-        boolean updated = flightRepository.updateStatus(flightId, status);
+        boolean updated = FlightManager.getInstance().updateFlightStatus(flightId, status);
 
         if (!updated) {
 

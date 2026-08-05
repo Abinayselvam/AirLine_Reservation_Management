@@ -3,6 +3,7 @@ package examples.service;
 import examples.enums.BookingStatus;
 import examples.enums.MealPreference;
 import examples.enums.SeatStatus;
+import examples.manager.BookingManager;
 import examples.model.*;
 import examples.repository.*;
 import examples.repository.irepository.IBookingPassengerRepository;
@@ -107,45 +108,55 @@ public class BookingService implements IBookingService {
 
         booking.transitionTo(BookingStatus.PAYMENT_PENDING);
 
-        bookingRepository.save(booking);
+        if (!examples.manager.BookingManager.getInstance().tryLockBookingAttempt(user.getId(), flightId)) {
 
-        passengers.forEach(p -> p.setBookingId(booking.getBookingId()));
+            System.out.println("A booking for this flight is already in progress for your account");
 
-        passengerRepository.saveAll(passengers);
-
-        System.out.printf("%nPNR : %s  |  Total Payable : Rs.%.2f  |  Pay within 20 minutes%n",
-                booking.getPnr(), booking.getTotalFare());
-
-        // --- Payment integration point (UC 5) ---
-        boolean paid = new PaymentService().processPayment(booking);
-
-        if (paid) {
-
-            booking.transitionTo(BookingStatus.CONFIRMED);
-
-            String eTicket = ETicketGenerator.generate(booking.getPnr());
-
-            booking.setETicketNumber(eTicket);
-
-            bookingRepository.updateStatus(booking.getBookingId(), BookingStatus.CONFIRMED);
-            bookingRepository.updateETicket(booking.getBookingId(), eTicket);
-
-            markSeats(flightId, SeatStatus.BOOKED);
-
-            flightRepository.updateAvailableSeats(flightId, -count);
-
-            System.out.println("Booking CONFIRMED. E-Ticket : " + eTicket);
-
-        } else {
-
-            booking.transitionTo(BookingStatus.CANCELLED);
-
-            bookingRepository.updateStatus(booking.getBookingId(), BookingStatus.CANCELLED);
-
-            markSeats(flightId, SeatStatus.AVAILABLE);
-
-            System.out.println("Booking CANCELLED - payment unsuccessful, seats released");
+            return;
         }
+
+        try {
+            passengers.forEach(p -> p.setBookingId(booking.getBookingId()));
+
+            passengerRepository.saveAll(passengers);
+
+            System.out.printf("%nPNR : %s  |  Total Payable : Rs.%.2f  |  Pay within 20 minutes%n",
+                    booking.getPnr(), booking.getTotalFare());
+
+            // --- Payment integration point (UC 5) ---
+            boolean paid = new PaymentService().processPayment(booking);
+
+            if (paid) {
+
+                booking.transitionTo(BookingStatus.CONFIRMED);
+
+                String eTicket = ETicketGenerator.generate(booking.getPnr());
+
+                booking.setETicketNumber(eTicket);
+
+                bookingRepository.updateStatus(booking.getBookingId(), BookingStatus.CONFIRMED);
+                bookingRepository.updateETicket(booking.getBookingId(), eTicket);
+
+                markSeats(flightId, SeatStatus.BOOKED);
+
+                flightRepository.updateAvailableSeats(flightId, -count);
+
+                System.out.println("Booking CONFIRMED. E-Ticket : " + eTicket);
+
+            } else {
+
+                booking.transitionTo(BookingStatus.CANCELLED);
+
+                bookingRepository.updateStatus(booking.getBookingId(), BookingStatus.CANCELLED);
+
+                markSeats(flightId, SeatStatus.AVAILABLE);
+
+                System.out.println("Booking CANCELLED - payment unsuccessful, seats released");
+            }
+        } finally {
+            examples.manager.BookingManager.getInstance().releaseBookingAttempt(user.getId(), flightId);
+        }
+
     }
 
     private List<BookingPassenger> collectPassengers(int count) {
@@ -213,7 +224,7 @@ public class BookingService implements IBookingService {
 
         System.out.print("Enter PNR : ");
 
-        Booking booking = bookingRepository.findByPNR(sc.nextLine());
+        Booking booking = BookingManager.getInstance().getBookingByPNR(sc.nextLine());
 
         printBookingDetails(booking);
     }

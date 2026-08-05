@@ -2,6 +2,7 @@ package examples.service;
 
 import examples.enums.PaymentMethod;
 import examples.enums.PaymentStatus;
+import examples.manager.PaymentManager;
 import examples.model.*;
 import examples.payment.CardPayment;
 import examples.payment.EmiPayment;
@@ -62,7 +63,7 @@ public class PaymentService implements IPaymentService {
                 continue;
             }
 
-            PaymentResult result = payment.process(payable);
+            PaymentResult result = examples.manager.PaymentManager.getInstance().routePayment(payment, payable);
 
             PaymentTransaction txn = new PaymentTransaction();
 
@@ -74,7 +75,7 @@ public class PaymentService implements IPaymentService {
             txn.setCreatedAt(LocalDateTime.now());
             txn.setStatus(result.isSuccess() ? PaymentStatus.SUCCESS : PaymentStatus.FAILED);
 
-            paymentRepository.save(txn);
+            PaymentManager.getInstance().logTransaction(txn);
 
             if (result.isSuccess()) {
 

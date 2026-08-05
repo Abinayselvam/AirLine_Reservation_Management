@@ -56,6 +56,20 @@ public class AdminMenu {
 
                 case 7 -> {
 
+                    System.out.println("\n===== SYSTEM CACHE / LOG STATS =====");
+
+                    System.out.println("FlightManager cached flights : " +
+                            examples.manager.FlightManager.getInstance().cacheSize());
+
+                    System.out.println("BookingManager cached bookings : " +
+                            examples.manager.BookingManager.getInstance().cacheSize());
+
+                    System.out.println("PaymentManager transaction log size : " +
+                            examples.manager.PaymentManager.getInstance().logSize());
+                }
+
+                case 8 -> {
+
                     SessionManager.logout();
 
                     return;

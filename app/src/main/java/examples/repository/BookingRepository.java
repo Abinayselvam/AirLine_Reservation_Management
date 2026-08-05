@@ -237,4 +237,27 @@ public class BookingRepository implements IBookingRepository {
 
         return false;
     }
+    @Override
+    public List<Booking> findAll() {
+
+        List<Booking> bookings = new ArrayList<>();
+
+        String sql = "SELECT * FROM bookings";
+
+        try (
+                Connection con = DBConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+
+            while (rs.next()) {
+                bookings.add(mapRow(rs));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bookings;
+    }
 }

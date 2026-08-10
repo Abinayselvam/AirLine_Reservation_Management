@@ -13,4 +13,10 @@ public interface IFlightService {
     void viewGroupedByPriceRange();
 
     void viewGroupedByDepartureSlot();
+
+    void viewPriceCalendar();
+
+    void flexibleDateSearch();
+
+    void airportAutocomplete();
 }

@@ -59,6 +59,11 @@ public class AdminMenu {
 
                     System.out.println("PaymentManager transaction log size : " +
                             examples.manager.PaymentManager.getInstance().logSize());
+                    System.out.println("Flight search cache entries : " +
+                            examples.util.FlightSearchCache.cacheSize());
+
+                    System.out.println("Top searched routes : " +
+                            examples.util.FlightSearchCache.topRoutes(5));
                 }
 
                 case 7 -> {

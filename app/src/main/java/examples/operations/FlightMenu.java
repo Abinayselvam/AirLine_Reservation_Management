@@ -64,7 +64,23 @@ public class FlightMenu {
                 }
                 case 9 -> AirportMenu.start();
 
-                case 10 -> { return; }
+
+
+                case 10 -> {
+                    service.viewPriceCalendar();
+                    System.out.println("10. Price Calendar (±3 days)");
+                }
+
+                case 11 ->{
+                    service.flexibleDateSearch();
+                System.out.println("11. Flexible Date Search (±3 days)");
+                }
+                case 12 -> {
+                    service.airportAutocomplete();
+                System.out.println("12. Airport Autocomplete");
+                }
+
+                case 13 -> { return; }
 
 
                 default -> System.out.println("Invalid Choice");

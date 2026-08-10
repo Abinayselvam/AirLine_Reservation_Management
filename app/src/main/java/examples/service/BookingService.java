@@ -148,6 +148,15 @@ public class BookingService implements IBookingService {
         }
 
         try {
+            boolean bookingSaved = BookingManager.getInstance().saveBooking(booking);
+
+            if (!bookingSaved) {
+
+                System.out.println("Could not save the booking - please try again");
+
+                return;
+            }
+
             passengers.forEach(p -> p.setBookingId(booking.getBookingId()));
 
             passengerRepository.saveAll(passengers);

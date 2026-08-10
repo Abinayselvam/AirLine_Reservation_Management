@@ -27,6 +27,8 @@ public class AirlineStaff extends User {
             
             3.Priority Bookings
 
+            4.Logout
+
             """);
     }
 }

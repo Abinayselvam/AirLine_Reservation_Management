@@ -213,8 +213,13 @@ public class UserRepository implements IUserRepository {
                 return mapRow(rs);
             }
 
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("fetching user " + userId, e);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            throw new examples.exception.DatabaseConnectionException("fetching User " + userId, e);
         }
 
         return null;

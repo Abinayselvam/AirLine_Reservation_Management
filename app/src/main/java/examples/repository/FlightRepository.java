@@ -119,10 +119,14 @@ public class FlightRepository implements IFlightRepository {
                 return mapRow(rs);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (java.sql.SQLTimeoutException e) {
 
+            throw new examples.exception.NetworkTimeoutException("fetching flight " + flightId, e);
+
+        } catch (Exception e) {
+
+            throw new examples.exception.DatabaseConnectionException("fetching flight " + flightId, e);
+        }
         return null;
     }
 

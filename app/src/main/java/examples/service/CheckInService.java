@@ -112,10 +112,12 @@ public class CheckInService implements ICheckInService {
                 return false;
             }
 
-            if (international && p.getIdProof().length() < 6) {
+            String docError = examples.util.BusinessRuleValidator.validateInternationalDocument(
+                    p, flight.getDepartureDate(), international);
 
-                System.out.println("Check-in blocked: " + p.getName() +
-                        " needs a valid passport for this international flight");
+            if (docError != null) {
+
+                System.out.println("Check-in blocked: " + docError);
 
                 return false;
             }

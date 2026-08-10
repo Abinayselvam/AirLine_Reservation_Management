@@ -15,11 +15,13 @@ public class BookingPassengerRepository implements IBookingPassengerRepository {
     public boolean saveAll(List<BookingPassenger> passengers) {
 
         String sql = """
-                INSERT INTO booking_passengers
-                (booking_id, name, age, gender, id_proof, meal_preference,
-                 special_assistance, frequent_flyer_number, seat_number,
-                 contact_email, contact_phone)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?)
+              
+                                                              INSERT INTO booking_passengers
+                                                              (booking_id, name, age, gender, id_proof, id_proof_expiry_date, meal_preference,
+                                                               special_assistance, frequent_flyer_number, seat_number,
+                                                               contact_email, contact_phone)
+                                                              VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+                                                           
                 """;
 
         try (
@@ -36,10 +38,12 @@ public class BookingPassengerRepository implements IBookingPassengerRepository {
                 ps.setString(5, p.getIdProof());
                 ps.setString(6, p.getMealPreference() == null ? null : p.getMealPreference().name());
                 ps.setString(7, p.getSpecialAssistance());
-                ps.setString(8, p.getFrequentFlyerNumber());
-                ps.setString(9, p.getSeatNumber());
-                ps.setString(10, p.getContactEmail());
-                ps.setString(11, p.getContactPhone());
+                ps.setObject(8, p.getIdProofExpiryDate());
+                ps.setString(9, p.getFrequentFlyerNumber());
+                ps.setString(10, p.getSeatNumber());
+                ps.setString(11, p.getContactEmail());
+                ps.setString(12, p.getContactPhone());
+
 
                 ps.addBatch();
             }
@@ -89,11 +93,17 @@ public class BookingPassengerRepository implements IBookingPassengerRepository {
                 p.setContactEmail(rs.getString("contact_email"));
                 p.setContactPhone(rs.getString("contact_phone"));
                 p.setCancelled(rs.getBoolean("cancelled"));
+                p.setIdProofExpiryDate(rs.getObject("id_proof_expiry_date", java.time.LocalDate.class));
                 passengers.add(p);
             }
 
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("fetching bookings " + bookingId, e);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            throw new examples.exception.DatabaseConnectionException("fetching bookings " + bookingId, e);
         }
 
         return passengers;

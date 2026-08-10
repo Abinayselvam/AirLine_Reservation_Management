@@ -109,8 +109,13 @@ public class BookingRepository implements IBookingRepository {
                 bookings.add(mapRow(rs));
             }
 
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("Flight  Booking " + bookings, e);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            throw new examples.exception.DatabaseConnectionException("Flight  Booking "+ bookings, e);
         }
 
         return bookings;
@@ -275,10 +280,15 @@ public class BookingRepository implements IBookingRepository {
 
             return ps.executeUpdate() > 0;
 
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("Flight  Booking " + bookingId, e);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            throw new examples.exception.DatabaseConnectionException("Flight  Booking " + bookingId, e);
         }
 
-        return false;
+
     }
 }

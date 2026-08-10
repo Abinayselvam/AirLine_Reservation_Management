@@ -17,6 +17,7 @@ public class BookingPassenger {
     private String contactEmail;
     private String contactPhone;
     private boolean cancelled;
+    private java.time.LocalDate idProofExpiryDate;
 
     public boolean isCancelled() { return cancelled; }
     public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
@@ -58,4 +59,6 @@ public class BookingPassenger {
     public void setContactPhone(String contactPhone) { this.contactPhone = contactPhone; }
 
     public boolean isInfant() { return age < 2; }
+    public java.time.LocalDate getIdProofExpiryDate() { return idProofExpiryDate; }
+    public void setIdProofExpiryDate(java.time.LocalDate idProofExpiryDate) { this.idProofExpiryDate = idProofExpiryDate; }
 }

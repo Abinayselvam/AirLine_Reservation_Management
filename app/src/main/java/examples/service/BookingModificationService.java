@@ -380,7 +380,6 @@ public class BookingModificationService implements IBookingModificationService {
 
             return null;
         }
-
         return booking;
     }
 }

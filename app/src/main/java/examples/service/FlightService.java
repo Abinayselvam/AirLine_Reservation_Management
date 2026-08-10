@@ -1,11 +1,13 @@
 package examples.service;
 
 import examples.enums.SortBy;
+import examples.model.FareBreakdown;
 import examples.model.Flight;
 import examples.model.SearchCriteria;
 import examples.repository.FlightRepository;
 import examples.repository.irepository.IFlightRepository;
 import examples.service.iservice.IFlightService;
+import examples.util.FareCalculator;
 import examples.util.FlightSearchCache;
 import examples.util.PaginationUtil;
 
@@ -139,6 +141,7 @@ public class FlightService implements IFlightService {
 
         double total = f.getFare() + taxes;
 
+
         System.out.println("-----------------------------------------");
         System.out.println(f.getAirlineName() + " " + f.getFlightNumber() +
                 " (" + f.getAircraftType() + ")");
@@ -153,6 +156,9 @@ public class FlightService implements IFlightService {
         System.out.printf("Base Fare : Rs.%.2f | Taxes : Rs.%.2f | Total : Rs.%.2f%n",
                 f.getFare(), taxes, total);
         System.out.println("Status : " + f.getStatus());
+        FareBreakdown breakdown = FareCalculator.calculate(f, 1, 0, 0, false);
+
+        System.out.println(breakdown);
     }
 
     @Override

@@ -36,11 +36,15 @@ public class NotificationLogRepository implements INotificationLogRepository {
 
             return ps.executeUpdate() > 0;
 
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("fetching log " + log, e);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            throw new examples.exception.DatabaseConnectionException("fetching log " + log, e);
         }
 
-        return false;
     }
 
     @Override

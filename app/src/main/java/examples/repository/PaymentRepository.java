@@ -77,9 +77,13 @@ public class PaymentRepository implements IPaymentRepository {
 
                 list.add(txn);
             }
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("fetching booking " + bookingId, e);
 
         } catch (Exception e) {
-            e.printStackTrace();
+
+            throw new examples.exception.DatabaseConnectionException("fetching booking " + bookingId, e);
         }
 
         return list;

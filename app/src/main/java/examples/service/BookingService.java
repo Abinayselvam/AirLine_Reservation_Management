@@ -3,6 +3,9 @@ package examples.service;
 import examples.enums.BookingStatus;
 import examples.enums.MealPreference;
 import examples.enums.SeatStatus;
+import examples.exception.AirlineSystemException;
+import examples.exception.FlightNotFoundException;
+import examples.exception.SeatUnavailableException;
 import examples.manager.BookingManager;
 import examples.model.*;
 import examples.repository.*;
@@ -42,15 +45,25 @@ public class BookingService implements IBookingService {
             return;
         }
 
-        System.out.print("Flight ID : ");
+        int flightId = InputValidator.readInt(sc, "Flight ID : ");
 
-        int flightId = Integer.parseInt(sc.nextLine());
+        Flight flight;
 
-        Flight flight = flightRepository.findById(flightId);
+        try {
 
-        if (flight == null || flight.getAvailableSeats() <= 0) {
+            flight = flightRepository.findById(flightId);
 
-            System.out.println("Flight unavailable");
+            if (flight == null) {
+                throw new FlightNotFoundException(flightId);
+            }
+
+            if (flight.getAvailableSeats() <= 0) {
+                throw new SeatUnavailableException("any seat on flight " + flightId);
+            }
+
+        } catch (AirlineSystemException e) {
+
+            ExceptionLogger.printFriendly(e);
 
             return;
         }
@@ -67,24 +80,39 @@ public class BookingService implements IBookingService {
 
         int count = Integer.parseInt(sc.nextLine());
 
-        if (count < 1 || count > 6) {
+        String countError = BusinessRuleValidator.validatePassengerCount(count);
 
-            System.out.println("A booking must have between 1 and 6 passengers");
+        if (countError != null) {
+
+            System.out.println(countError);
 
             return;
         }
 
         List<BookingPassenger> passengers = collectPassengers(count);
 
-        boolean hasInfant = passengers.stream().anyMatch(BookingPassenger::isInfant);
+        String infantError = BusinessRuleValidator.validateInfantsHaveAdult(passengers);
 
-        boolean hasAdult = passengers.stream().anyMatch(p -> p.getAge() >= 18);
+        if (infantError != null) {
 
-        if (hasInfant && !hasAdult) {
-
-            System.out.println("An infant must travel with an adult - booking cancelled");
+            System.out.println(infantError + " - booking cancelled");
 
             return;
+        }
+
+        boolean international = isInternational(flight);
+
+        for (BookingPassenger p : passengers) {
+
+            String docError = BusinessRuleValidator.validateInternationalDocument(
+                    p, flight.getDepartureDate(), international);
+
+            if (docError != null) {
+
+                System.out.println(docError + " - booking cancelled");
+
+                return;
+            }
         }
 
         booking.transitionTo(BookingStatus.PASSENGER_DETAILS_ADDED);
@@ -102,8 +130,12 @@ public class BookingService implements IBookingService {
 
         booking.transitionTo(BookingStatus.SEAT_SELECTED);
 
+        FareBreakdown fareBreakdown = FareCalculator.calculate(flight, count, seatCharges, 0, international);
+
         booking.setSeatCharges(seatCharges);
-        booking.setTotalFare(flight.getFare() * count + seatCharges);
+        booking.setTotalFare(fareBreakdown.getTotal());
+
+        System.out.println(fareBreakdown);
         booking.setExpiryTime(LocalDateTime.now().plusMinutes(20));
 
         booking.transitionTo(BookingStatus.PAYMENT_PENDING);
@@ -155,10 +187,32 @@ public class BookingService implements IBookingService {
 
                 System.out.println("Booking CANCELLED - payment unsuccessful, seats released");
             }
-        } finally {
+        }  catch (AirlineSystemException e) {
+
+        ExceptionLogger.printFriendly(e);
+
+    } catch (Exception e) {
+
+        System.out.println("Booking could not be completed due to an unexpected error.");
+
+        ExceptionLogger.log(e);
+    }
+        finally {
             examples.manager.BookingManager.getInstance().releaseBookingAttempt(user.getId(), flightId);
         }
 
+    }
+    private boolean isInternational(Flight flight) {
+
+        var airportRepository = new examples.repository.AirportRepository();
+
+        var source = airportRepository.findByCode(flight.getSource());
+
+        var destination = airportRepository.findByCode(flight.getDestination());
+
+        if (source == null || destination == null) return false;
+
+        return !source.getCountry().equalsIgnoreCase(destination.getCountry());
     }
 
     private List<BookingPassenger> collectPassengers(int count) {
@@ -197,10 +251,14 @@ public class BookingService implements IBookingService {
 
                     System.out.print("Contact Phone : ");
                     p.setContactPhone(sc.nextLine());
+                    System.out.print("ID Proof Expiry Date (yyyy-MM-dd, blank if unknown) : ");
+                    String expiry = sc.nextLine();
+                    if (!expiry.isBlank()) p.setIdProofExpiryDate(java.time.LocalDate.parse(expiry));
 
                     return p;
 
                 }).collect(Collectors.toList());
+
     }
 
     private void assignLockedSeatsToPassengers(int flightId, List<BookingPassenger> passengers) {

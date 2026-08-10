@@ -98,11 +98,14 @@ public class UserProfileRepository implements IUserProfileRepository {
                 return profile;
             }
 
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("fetching user " + userId, e);
+
         } catch (Exception e) {
 
-            e.printStackTrace();
+            throw new examples.exception.DatabaseConnectionException("fetching user " + userId, e);
         }
-
         return null;
     }
 

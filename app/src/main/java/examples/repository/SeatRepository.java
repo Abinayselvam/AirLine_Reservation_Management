@@ -35,8 +35,13 @@ public class SeatRepository implements ISeatRepository {
                 seats.add(mapRow(rs));
             }
 
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("fetching flight " + flightId, e);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            throw new examples.exception.DatabaseConnectionException("fetching flight " + flightId, e);
         }
 
         return seats;

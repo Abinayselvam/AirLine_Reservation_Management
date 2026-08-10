@@ -2,6 +2,8 @@ package examples.service;
 
 import examples.enums.BookingStatus;
 import examples.enums.SeatStatus;
+import examples.exception.AirlineSystemException;
+import examples.manager.NotificationManager;
 import examples.model.*;
 import examples.repository.*;
 import examples.repository.irepository.IBookingPassengerRepository;
@@ -12,6 +14,7 @@ import examples.service.iservice.IBookingCancellationService;
 import examples.service.iservice.IPaymentService;
 import examples.util.CancellationPolicyUtil;
 import examples.util.ETicketGenerator;
+import examples.util.ExceptionLogger;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -91,8 +94,8 @@ public class BookingCancellationService implements IBookingCancellationService {
 
             var result = paymentService.processRefund(
                     booking.getUserId(), booking.getBookingId(), booking.getPnr(), refundAmount);
-            examples.manager.NotificationManager.getInstance().sendCancellationConfirmation(
-                    new examples.repository.UserRepository().findById(booking.getUserId()), booking.getPnr());
+            NotificationManager.getInstance().sendCancellationConfirmation(
+                    new UserRepository().findById(booking.getUserId()), booking.getPnr());
 
             System.out.println(result.getMessage());
 
@@ -147,13 +150,20 @@ public class BookingCancellationService implements IBookingCancellationService {
 
         for (String sel : selections) {
 
-            int idx;
+            int idx = 0;
 
             try {
                 idx = Integer.parseInt(sel.trim()) - 1;
-            } catch (NumberFormatException e) {
-                continue;
-            }
+            }   catch (AirlineSystemException e) {
+
+            ExceptionLogger.printFriendly(e);
+
+        } catch (Exception e) {
+
+            System.out.println("Booking could not be completed due to an unexpected error.");
+
+            ExceptionLogger.log(e);
+        }
 
             if (idx < 0 || idx >= active.size()) continue;
 

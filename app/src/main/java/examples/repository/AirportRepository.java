@@ -122,8 +122,13 @@ public class AirportRepository implements IAirportRepository {
                 return mapRow(rs);
             }
 
+        } catch (java.sql.SQLTimeoutException e) {
+
+            throw new examples.exception.NetworkTimeoutException("fetching flight " + code, e);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            throw new examples.exception.DatabaseConnectionException("fetching flight " + code, e);
         }
 
         return null;

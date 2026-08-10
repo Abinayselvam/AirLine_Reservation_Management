@@ -97,9 +97,9 @@ repository and service is coded against its interface (`IXxxRepository` /
 4. Update credentials in `examples/util/DBConnection.java` if they differ from
    the defaults:
    ```java
-   URL      = "jdbc:mysql://localhost:3306/airline_service"
-   USER     = "root"
-   PASSWORD = "root"
+//   URL      = "jdbc:mysql://localhost:3306/airline_service"
+//   USER     = "root"
+//   PASSWORD = "root"
    ```
 
 ## Running the Console App

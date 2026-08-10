@@ -34,8 +34,20 @@ public class AirlineStaffMenu {
                     if (AccessValidator.validate(
                             Permission.VIEW_ALL_BOOKINGS)) {
 
-                        System.out.println(
-                                "View bookings coming in UC 4");
+                        System.out.println("\n1. Lookup by PNR  2. Lookup by Email/Phone  3. Lookup by E-Ticket");
+
+                        System.out.print("Choice : ");
+
+                        int lookupChoice = Integer.parseInt(sc.nextLine());
+
+                        var bookingService = new examples.service.BookingService();
+
+                        switch (lookupChoice) {
+                            case 1 -> bookingService.viewBookingByPNR();
+                            case 2 -> bookingService.viewBookingByContact();
+                            case 3 -> bookingService.viewBookingByETicket();
+                            default -> System.out.println("Invalid Choice");
+                        }
                     }
                 }
                 case 3 -> PriorityBookingMenu.start();

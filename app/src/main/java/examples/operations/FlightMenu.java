@@ -22,7 +22,13 @@ public class FlightMenu {
             System.out.println("4. View Cheapest Flight per Route");
             System.out.println("5. View Grouped by Price Range");
             System.out.println("6. View Grouped by Departure Time Slot");
-            System.out.println("7. Back");
+            System.out.println("7. View Seat Map");
+            System.out.println("8. Select Seats");
+            System.out.println("9. Airport Info");
+            System.out.println("10. Price Calendar (+/-3 days)");
+            System.out.println("11. Flexible Date Search (+/-3 days)");
+            System.out.println("12. Airport Autocomplete");
+            System.out.println("13. Back");
 
             System.out.print("Choice : ");
 
@@ -41,6 +47,7 @@ public class FlightMenu {
                 case 5 -> service.viewGroupedByPriceRange();
 
                 case 6 -> service.viewGroupedByDepartureSlot();
+
                 case 7 -> {
 
                     System.out.print("Flight ID : ");
@@ -62,26 +69,16 @@ public class FlightMenu {
 
                     new examples.service.SeatService().selectSeats(flightId, count);
                 }
+
                 case 9 -> AirportMenu.start();
 
+                case 10 -> service.viewPriceCalendar();
 
+                case 11 -> service.flexibleDateSearch();
 
-                case 10 -> {
-                    service.viewPriceCalendar();
-                    System.out.println("10. Price Calendar (±3 days)");
-                }
-
-                case 11 ->{
-                    service.flexibleDateSearch();
-                System.out.println("11. Flexible Date Search (±3 days)");
-                }
-                case 12 -> {
-                    service.airportAutocomplete();
-                System.out.println("12. Airport Autocomplete");
-                }
+                case 12 -> service.airportAutocomplete();
 
                 case 13 -> { return; }
-
 
                 default -> System.out.println("Invalid Choice");
             }

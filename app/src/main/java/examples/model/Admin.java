@@ -36,6 +36,10 @@ public class Admin extends User {
             
             5.Priority Bookings
 
+            6.System Cache / Log Stats
+
+            7.Logout
+
             """);
     }
 }

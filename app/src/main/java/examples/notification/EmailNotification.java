@@ -1,9 +1,14 @@
 package examples.notification;
 
+import examples.integration.IEmailGatewayClient;
+import examples.integration.SendGridLikeEmailClient;
 public class EmailNotification extends Notification {
+
+    private final IEmailGatewayClient gatewayClient;
 
     public EmailNotification(String recipient, String subject, String message) {
         super(recipient, subject, message);
+        this.gatewayClient = new SendGridLikeEmailClient();
     }
 
     @Override
@@ -16,8 +21,6 @@ public class EmailNotification extends Notification {
             return false;
         }
 
-        System.out.println("[Email -> " + recipient + "] " + subject + " | " + message);
-
-        return true;
+        return gatewayClient.sendEmail(recipient, subject, message);
     }
 }

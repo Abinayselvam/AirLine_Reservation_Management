@@ -1,9 +1,15 @@
 package examples.notification;
 
+import examples.integration.ISmsGatewayClient;
+import examples.integration.TwilioLikeSmsClient;
+
 public class SmsNotification extends Notification {
+
+    private final ISmsGatewayClient gatewayClient;
 
     public SmsNotification(String recipient, String subject, String message) {
         super(recipient, subject, message);
+        this.gatewayClient = new TwilioLikeSmsClient();
     }
 
     @Override
@@ -16,9 +22,6 @@ public class SmsNotification extends Notification {
             return false;
         }
 
-        // SMS is short-form: subject folded into the message body
-        System.out.println("[SMS -> " + recipient + "] " + subject + ": " + message);
-
-        return true;
+        return gatewayClient.sendSms(recipient, subject + ": " + message);
     }
 }
